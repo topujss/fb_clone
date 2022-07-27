@@ -4,8 +4,13 @@
 
 // Learned: Full facebook design and developement
 
+/**
+ * Only edit post left and till delete post has preserved in github
+ */
+
 // get elements
 const main_form = document.getElementById('post-add-me');
+const edit_form = document.getElementById('edit-form');
 const msg = document.querySelector('.msg');
 const all_post = document.querySelector('.all-post');
 
@@ -39,7 +44,7 @@ const getAllPost = () => {
 	          <div class="dropdown">
 	            <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
 	            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-	              <li><a class="dropdown-item edit-post" href="#">edit</a></li>
+	              <li><a class="dropdown-item edit-post" edit_id="${data.id}" href="#">edit</a></li>
 	              <li><a class="dropdown-item delete-post w-100" post_id="${
                   data.id
                 }" href="#">Delete</a></li>
@@ -119,4 +124,55 @@ all_post.onclick = (e) => {
       getAllPost();
     }
   }
+
+  /**
+   * post edit feature
+   */
+  if (e.target.classList.contains('edit-post')) {
+    // get post id
+    const editId = e.target.getAttribute('edit_id');
+
+    // get all post
+    const edit_key = readLsData('fb_post');
+
+    // data leftover
+    const leftover = edit_key.filter((data) => data.id !== editId);
+
+    // show data to html
+    edit_form.innerHTML += `
+		<div class="my-3">
+			<label for="">Author name</label>
+			<input name="aname" value="${leftover.aname}" type="text" class="form-control" />
+			<input name="id" value="${leftover.id}" type="hidden" class="form-control" />
+		</div>
+		<div class="my-3">
+			<label for="">Author Photo</label>
+			<input name="aphoto" value="${leftover.aphoto}" type="url" class="form-control" />
+		</div>
+		<div class="my-3">
+			<label for="">Post description</label>
+			<textarea name="pdesc" value="${leftover.pdesc}" class="form-control" placeholder="Write a description here"></textarea>
+		</div>
+		<div class="my-3">
+			<label for="">Post Photo</label>
+			<input name="pphoto" value="${leftover.pphoto}" type="url" class="form-control" />
+		</div>
+		<div class="my-3 text-center">
+			<input type="submit" value="Edit post" class="btn btn-primary w-50"></input>
+		</div>`;
+  }
+};
+
+edit_form.onsubmit = (e) => {
+  e.preventDefault();
+
+  const editId = e.target.getAttribute('edit_id');
+
+  let allData = readLsData('fb_post');
+
+  const value = allData.filter((data) => data.id == editId);
+
+  updataLsData('fb_post', value);
+
+  getAllPost();
 };
