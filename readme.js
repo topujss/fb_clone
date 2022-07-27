@@ -40,7 +40,9 @@ const getAllPost = () => {
 	            <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
 	            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 	              <li><a class="dropdown-item edit-post" href="#">edit</a></li>
-	              <li><a class="dropdown-item w-100" post_id="${data.id}" href="#">Delete</a></li>
+	              <li><a class="dropdown-item delete-post w-100" post_id="${
+                  data.id
+                }" href="#">Delete</a></li>
 	            </ul>
 	          </div>
 	        </div>
@@ -90,5 +92,31 @@ main_form.onsubmit = (e) => {
     createLsData('fb_post', val);
     e.target.reset();
     getAllPost();
+  }
+};
+
+// post delete feature
+all_post.onclick = (e) => {
+  // a tag # remover
+  e.preventDefault();
+
+  // classList condition
+  if (e.target.classList.contains('delete-post')) {
+    // get post id
+    const postId = e.target.getAttribute('post_id');
+
+    if (confirm('Are you sure?') == true) {
+      // get all post
+      const post_key = readLsData('fb_post');
+
+      // data leftover
+      const data_deleted = post_key.filter((data) => data.id !== postId);
+
+      // now update ls data
+      updataLsData('fb_post', data_deleted);
+
+      // reload timeline
+      getAllPost();
+    }
   }
 };
