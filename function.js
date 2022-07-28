@@ -19,14 +19,14 @@ const randomId = () => {
  */
 
 const readLsData = (key) => {
-  // localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : '';
+  return localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : false;
 
-  if (localStorage.getItem(key)) {
-    // returning data after converting
-    return JSON.parse(localStorage.getItem(key));
-  } else {
-    return false;
-  }
+  // if (localStorage.getItem(key)) {
+  //   // returning data after converting
+  //   return JSON.parse(localStorage.getItem(key));
+  // } else {
+  //   return false;
+  // }
 };
 
 /**

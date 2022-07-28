@@ -44,7 +44,9 @@ const getAllPost = () => {
 	          <div class="dropdown">
 	            <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
 	            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-	              <li><a class="dropdown-item edit-post" edit_id="${data.id}" href="#">edit</a></li>
+	              <li><a class="dropdown-item edit-post" edit_id="${
+                  data.id
+                }" data-bs-toggle="modal" data-bs-target="#edit-post">edit</a></li>
 	              <li><a class="dropdown-item delete-post w-100" post_id="${
                   data.id
                 }" href="#">Delete</a></li>
@@ -136,7 +138,7 @@ all_post.onclick = (e) => {
     const edit_key = readLsData('fb_post');
 
     // data leftover
-    const leftover = edit_key.filter((data) => data.id !== editId);
+    const leftover = edit_key.find((data) => data.id == editId);
 
     // show data to html
     edit_form.innerHTML += `
@@ -151,7 +153,7 @@ all_post.onclick = (e) => {
 		</div>
 		<div class="my-3">
 			<label for="">Post description</label>
-			<textarea name="pdesc" value="${leftover.pdesc}" class="form-control" placeholder="Write a description here"></textarea>
+			<textarea name="pdesc" class="form-control" placeholder="Write a description here">${leftover.pdesc}</textarea>
 		</div>
 		<div class="my-3">
 			<label for="">Post Photo</label>
