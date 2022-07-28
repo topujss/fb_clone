@@ -24,58 +24,60 @@ const getAllPost = () => {
     return false;
   }
 
-  post.reverse().map((data) => {
-    list += `
-	  <div class="fb-timeline my-4">
-	    <div class="card shadow-sm overflow-hidden rounded-3">
-	      <div class="card-body p-2">
-	        <div class="post-auth">
-	          <div class="u-info">
-	            <img src="${data.aphoto}" alt="" />
-	            <div class="details">
-	              <span>${data.aname}</span>
-	              <small>
-	                Just Now
-	                <i class="bi bi-dot"></i>
-	                <i class="bi bi-globe"></i>
-	              </small>
-	            </div>
-	          </div>
-	          <div class="dropdown">
-	            <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-	            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-	              <li><a class="dropdown-item edit-post" edit_id="${
-                  data.id
-                }" data-bs-toggle="modal" data-bs-target="#edit-post">edit</a></li>
-	              <li><a class="dropdown-item delete-post w-100" post_id="${
-                  data.id
-                }" href="#">Delete</a></li>
-	            </ul>
-	          </div>
-	        </div>
-	        <div class="post-content my-2">
-	          <p>${data.pdesc}</p>
-	        </div>
-	        <div class="post-timeline"></div>
-	      </div>
-				${data.pphoto ? `<img src="${data.pphoto}" class="w-100" alt="" />` : ''}
-	      <div class="post-react-area d-flex">
-	        <div class="react-box">
-	          <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
-	          <span>like 1</span>
-	        </div>
-	        <div class="react-box">
-	          <i class="bi bi-chat-square"></i>
-	          <span>comment</span>
-	        </div>
-	        <div class="react-box">
-	          <i class="bi bi-box-arrow-up-right"></i>
-	          <span>share</span>
-	        </div>
-	      </div>
-	    </div>
-	  </div>`;
-  });
+  if (post) {
+    post.reverse().map((data) => {
+      list += `
+      <div class="fb-timeline my-4">
+        <div class="card shadow-sm overflow-hidden rounded-3">
+          <div class="card-body p-2">
+            <div class="post-auth">
+              <div class="u-info">
+                <img src="${data.aphoto}" alt="" />
+                <div class="details">
+                  <span>${data.aname}</span>
+                  <small>
+                    Just Now
+                    <i class="bi bi-dot"></i>
+                    <i class="bi bi-globe"></i>
+                  </small>
+                </div>
+              </div>
+              <div class="dropdown">
+                <a href="#" id="dropdownMenuLink" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li><a class="dropdown-item edit-post" edit_id="${
+                    data.id
+                  }" data-bs-toggle="modal" href="#edit-post">edit</a></li>
+                  <li><a class="dropdown-item delete-post w-100" post_id="${
+                    data.id
+                  }" href="#">Delete</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="post-content my-2">
+              <p>${data.pdesc}</p>
+            </div>
+            <div class="post-timeline"></div>
+          </div>
+          ${data.pphoto ? `<img src="${data.pphoto}" class="w-100" alt="" />` : ''}
+          <div class="post-react-area d-flex">
+            <div class="react-box">
+              <i class="bi bi-hand-thumbs-up-fill text-primary"></i>
+              <span>like 1</span>
+            </div>
+            <div class="react-box">
+              <i class="bi bi-chat-square"></i>
+              <span>comment</span>
+            </div>
+            <div class="react-box">
+              <i class="bi bi-box-arrow-up-right"></i>
+              <span>share</span>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    });
+  }
 
   all_post.innerHTML = list;
 };
@@ -94,9 +96,9 @@ main_form.onsubmit = (e) => {
   } else {
     const id = randomId();
 
-    const val = { ...data, id };
+    const value = { ...data, id };
 
-    createLsData('fb_post', val);
+    createLsData('fb_post', value);
     e.target.reset();
     getAllPost();
   }
@@ -130,7 +132,7 @@ all_post.onclick = (e) => {
   /**
    * post edit feature
    */
-  if (e.target.classList.contains('edit-post')) {
+  if (e.target.hasAttribute('edit_id')) {
     // get post id
     const editId = e.target.getAttribute('edit_id');
 
@@ -141,7 +143,7 @@ all_post.onclick = (e) => {
     const leftover = edit_key.find((data) => data.id == editId);
 
     // show data to html
-    edit_form.innerHTML += `
+    edit_form.innerHTML = `
 		<div class="my-3">
 			<label for="">Author name</label>
 			<input name="aname" value="${leftover.aname}" type="text" class="form-control" />
@@ -164,17 +166,22 @@ all_post.onclick = (e) => {
 		</div>`;
   }
 };
+getAllPost();
 
 edit_form.onsubmit = (e) => {
   e.preventDefault();
 
-  const editId = e.target.getAttribute('edit_id');
+  const form_data = new FormData(e.target);
+  const val = Object.fromEntries(form_data.entries());
+  const { aname, aphoto, pdesc, pphoto, id } = val;
 
   let allData = readLsData('fb_post');
 
-  const value = allData.filter((data) => data.id == editId);
+  const value = allData.findIndex((data) => data.id == id);
 
-  updataLsData('fb_post', value);
+  allData[value] = { aname, aphoto, pdesc, pphoto, id };
+
+  updataLsData('fb_post', allData);
 
   getAllPost();
 };
