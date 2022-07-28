@@ -4,10 +4,6 @@
 
 // Learned: Full facebook design and developement
 
-/**
- * Only edit post left and till delete post has preserved in github
- */
-
 // get elements
 const main_form = document.getElementById('post-add-me');
 const edit_form = document.getElementById('edit-form');
@@ -104,8 +100,10 @@ main_form.onsubmit = (e) => {
   }
 };
 
-// post delete feature
 all_post.onclick = (e) => {
+	/**
+	 * post delete feature
+	 */
   // a tag # remover
   e.preventDefault();
 
