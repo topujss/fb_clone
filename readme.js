@@ -1,8 +1,16 @@
-// MERN 6-29-22 https://www.youtube.com/watch?v=Mz_10hA1T1k << start from this.
-// MERN 6-29-22 https://www.youtube.com/watch?v=lqUIXkzSav8
-// MERN 7-03-22 www.youtube.com/watch?v=nkLxjlhI6Ho
+/**
+ * videos: MERN 6-29-22 https://www.youtube.com/watch?v=Mz_10hA1T1k << start from this.
+ * MERN p2 6-29-22 https://www.youtube.com/watch?v=lqUIXkzSav8
+ * MERN 7-03-22 www.youtube.com/watch?v=nkLxjlhI6Ho
+ * Learned: Full facebook design and developement
+ */
 
-// Learned: Full facebook design and developement
+/**
+ * What steps are taken. show below?
+ * 1. get all elements from html
+ * 2. submit main_form and with that data pass it to local Storage
+ * 3. show data by map loop with the form that store in post. In the list add post by updated form data found and pass it to frontend view to show in frontend.
+ */
 
 // get elements
 const main_form = document.getElementById('post-add-me');
